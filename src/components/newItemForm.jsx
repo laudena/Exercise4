@@ -1,4 +1,6 @@
 import React from 'react';
+import MenuStore from '../flux/stores/menu';
+import MenuActions from '../flux/actions/menu';
 
 export default React.createClass({
     propTypes: {
@@ -16,7 +18,8 @@ export default React.createClass({
     },
     createNew: function(s) {
         console.log(this.state);
-        this.props.onNewItem(this.state.selected);
+        //this.props.onNewItem(this.state.selected);
+        MenuActions.AddNewItem(this.state);
     },
 
     render: function() {

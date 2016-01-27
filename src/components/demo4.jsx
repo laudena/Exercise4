@@ -1,4 +1,4 @@
-import React from 'react';
+
 import Selector from './selector';
 import TimeConverter from "./TimeConverter";
 import Counter from "./counter";
@@ -6,6 +6,7 @@ import MultiInput from "./multi_input";
 import FilteredList from "./filteredList";
 import NewItem from "./newItemForm";
 import _ from 'underscore';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import MenuStore from '../flux/stores/menu';
 import MenuActions from '../flux/actions/menu';
@@ -22,6 +23,7 @@ export default React.createClass({
     // React Hook
     componentDidMount: function() {
         MenuStore.subscribe(this.handleStoreChange);
+        this.newItemCreator();
     },
 
     // React Hook
@@ -40,7 +42,7 @@ export default React.createClass({
         };
     },
 
-  getInitialState: function() {
+  /*getInitialState: function() {
       var children = [];
       //var child1 = React.createElement(Counter, {max:"10"});
       //var child2 = React.createElement(TimeConverter, null);
@@ -50,25 +52,15 @@ export default React.createClass({
       children.push(child3);
 
       return {children};
-  },
+  },*/
+    newItemCreator: function() {
+        var child3 = React.createElement(NewItem, {onNewItem:this.setNewItem});
+        this.setNewItem(child3);
+
+    },
 
   render: function () {
-    /*var listOfItems = _.map(this.state.children, function(name) {
-        if (name === "counter"){
-            return '<Counter max="10" />';
-        }
-        else if (name === "TimeConverter"){
-            return '<TimeConverter />';
-        }
-        else if (name === "multi_input"){
-            return '<MultiInput  boxCount="7"/>';
-        }
-        else if (name === "filteredList"){
-            return '<FilteredList items={days}/>';
-        }
-    });*/
-
-      return (<div>
+     return (<div>
       <Selector>
           {this.state.children}
       </Selector>
@@ -77,28 +69,8 @@ export default React.createClass({
   },
   setNewItem : function(item)
   {
-      var child = null;
-      switch (item)
-      {
-          case  'Counter': child = React.createElement(Counter, {boxCount:"6", max:"10",  items:days});
-              break;
-          case  'TimeConverter': child = React.createElement(TimeConverter, {boxCount:"6", max:"10",  items:days});
-              break;
-          case  'NewItem': child = React.createElement(NewItem, {boxCount:"6", max:"10",  items:days});
-              break;
-          case  'MultiInput': child = React.createElement(MultiInput, {boxCount:"6", max:"10",  items:days});
-              break;
-          case  'FilteredList': child = React.createElement(FilteredList, {items:days});
-              break;
+      MenuActions.AddNewItem(item);
 
-
-      }
-
-
-      var curState = this.state.children;
-      curState.push(child);
-      this.setState({children :curState});
-      console.log("GOT IT!!!!" + item);
   },
 });
 
